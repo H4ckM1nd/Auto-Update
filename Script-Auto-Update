@@ -1,0 +1,13 @@
+function Auto-Update (){
+if [[ $EUID -eq 0 ]];
+then
+apt update &&
+apt upgrade -y &&
+apt autoremove -y &&
+deborphan | xargs sudo apt-get remove -y --purge &&
+apt autoclean -y &&
+apt moo
+else
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean
+fi
+}
