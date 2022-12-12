@@ -1,13 +1,25 @@
-function Auto-Update (){
-if [[ $EUID -eq 0 ]];
-then
-apt update &&
-apt upgrade -y &&
-apt autoremove -y &&
-deborphan | xargs sudo apt-get remove -y --purge &&
-apt autoclean -y &&
-apt moo
-else
-sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean
-fi
+# This function updates and upgrades all packages on a system running apt
+function auto-update {
+  # Check if the user has root privileges
+  if [[ $EUID -eq 0 ]]; then
+    # Update the package list and upgrade all packages
+    apt update && apt upgrade -y
+    # Remove any orphaned packages
+    apt autoremove -y
+    # Remove any packages that were installed as dependencies but are no longer needed
+    deborphan | xargs sudo apt-get remove -y --purge
+    # Clean up the package cache
+    apt autoclean -y
+    # Print a cow to the terminal (just for fun)
+    apt moo
+  else
+    # If the user doesn't have root privileges, run the commands with sudo
+    sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo autoclean -y
+  fi
 }
+Note: This function will only work on systems that use apt as the package manager, such as Ubuntu and Debian. 
+Other Linux distributions may use different package managers, such as yum on Red Hat-based systems and dnf on Fedora-based systems.
+
+
+
+
